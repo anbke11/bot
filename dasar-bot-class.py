@@ -1,6 +1,7 @@
 # test-bot(bot class)
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
+import os
 import discord # type: ignore
 import random
 from discord.ext import commands # type: ignore
@@ -73,4 +74,36 @@ async def joined(ctx, member: discord.Member):
     """Says when a member joined."""
     await ctx.send( f'welcome{member.name} to {discord.utils.format_dt(member.joined_at)}')
 
-bot.run('')
+
+
+# overwriting kalimat.txt
+@bot.command()
+async def tulis(ctx, *, my_string: str):
+    with open('kalimat.txt', 'w', encoding='utf-8') as t:
+        text = ""
+        text += my_string
+        t.write(text)
+# append kalimat.txt
+@bot.command()
+async def tambahkan(ctx, *, my_string: str):
+    with open('kalimat.txt', 'a', encoding='utf-8') as t:
+        text = "\n"
+        text += my_string
+        t.write(text)
+# reading kalimat.txt
+@bot.command()
+async def baca(ctx):
+    with open('kalimat.txt', 'r', encoding='utf-8') as t:
+        document = t.read()
+        await ctx.send(document)
+
+# random local meme image
+@bot.command()
+async def meme(ctx):
+    img_name = random.choice(os.listdir('meme'))
+    with open(f'meme/{img_name}', 'rb') as f:
+    # with open(f'meme/enemies-meme.jpg', 'rb') as f:
+        # Mari simpan file perpustakaan/library Discord yang dikonversi dalam variabel ini!
+        picture = discord.File(f)
+    await ctx.send(file=picture)
+bot.run("")
